@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Misti meye</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<div class="wrapper">
+	<div class="top-section">
+		<h1><span id="head"></span><br/>Sheyasi</h1>
+		<canvas id="birthday"></canvas>
+	</div>
+	<div class="next">
+		<h2>Next birthday is coming after</h2>
+		<div id="timer"></div>
+	</div>
+  <div class="cloud-div">
+    <a href="javascript:playSound('dog');">
+    <div id="background-wrap">
+    <div class="x1">
+        <div class="cloud"></div>
+    </div>
+
+    <div class="x2">
+        <div class="cloud"></div>
+    </div>
+
+    <div class="x3">
+        <div class="cloud"></div>
+    </div>
+
+    <div class="x4">
+        <div class="cloud"></div>
+    </div>
+
+    <div class="x5">
+        <div class="cloud"></div>
+    </div>
+</div>
+</a> 
+<!-- Link -->
+    <a href="javascript:playSound('dog')" class="audio-btn">Touch any cloud</a>
+  </div>
+
+  <!--Audio File-->
+  <audio id="dog"  src="http://c0026106.cdn1.cloudfiles.rackspacecloud.com/2fbc94686ceb434a864c0691906bd144_dog.mp3" preload="auto"></audio>
+  <div class="marquee-div">
+    <div class="marquee">
+  <div class="track">
+    <div class="content">কেমন আছো তুমি? ভালো তো? বাড়ির সবাই ভালো আছে তো? কি করছো বলো? এটা তোমার জন্য বানালাম পছন্দ হয়েছে? মিষ্টি খাবে হ্যাংলা মেয়ে? শোনো শোনো আমার কিন্তু অনেক গুলো খাওয়া বাকি আছে, কবে দেবে? অনেকটা সময় তোমার নষ্ট করে দিলাম ফালতু বকে😑। শোনো সাবধানে থাকবে। টাটা মিষ্টি মেয়ে।   খুব ভালো থাকবে, তোমার সব ইচ্ছা পূরণ হোক। এখনের মতো আসি। আমি আবার বকাতে আসব ঠিক।😄😃👍🙏&nbsp;কেমন আছো তুমি? ভালো তো? বাড়ির সবাই ভালো আছে তো? কি করছো বলো? এটা তোমার জন্য বানালাম পছন্দ হয়েছে? মিষ্টি খাবে হ্যাংলা মেয়ে? শোনো শোনো আমার কিন্তু অনেক গুলো খাওয়া বাকি আছে, কবে দেবে? অনেকটা সময় তোমার নষ্ট করে দিলাম ফালতু বকে😑। শোনো সাবধানে থাকবে। টাটা মিষ্টি মেয়ে।   খুব ভালো থাকবে, তোমার সব ইচ্ছা পূরণ হোক। এখনের মতো আসি। আমি আবার বকাতে আসব ঠিক।😄😃👍🙏</div>
+  </div>
+</div>
+  </div>
+</div>
+
+<script>
+	var year= (new Date().getFullYear());
+	var next= (year + 1);
+	bday = "February 10, "+ next +" 00:00:00";
+	
+	function updateTimer() {
+  future  = Date.parse(bday);
+  now     = new Date();
+  diff    = future - now;
+
+  days  = Math.floor( diff / (1000*60*60*24) );
+  hours = Math.floor( diff / (1000*60*60) );
+  mins  = Math.floor( diff / (1000*60) );
+  secs  = Math.floor( diff / 1000 );
+
+  d = days;
+  h = hours - days  * 24;
+  m = mins  - hours * 60;
+  s = secs  - mins  * 60;
+
+  document.getElementById("timer")
+    .innerHTML =
+      '<div>' + d + '<span>days</span></div>' +
+      '<div>' + h + '<span>hours</span></div>' +
+      '<div>' + m + '<span>minutes</span></div>' +
+      '<div>' + s + '<span>seconds</span></div>' ;
+}
+setInterval('updateTimer()', 1000 );
+
+// animation
+// helper functions
+const PI2 = Math.PI * 2
+const random = (min, max) => Math.random() * (max - min + 1) + min | 0
+const timestamp = _ => new Date().getTime()
+
+// container
+class Birthday {
+  constructor() {
+    this.resize()
+
+    // create a lovely place to store the firework
+    this.fireworks = []
+    this.counter = 0
+
+  }
+  
+  resize() {
+    this.width = canvas.width = window.innerWidth
+    let center = this.width / 2 | 0
+    this.spawnA = center - center / 4 | 0
+    this.spawnB = center + center / 4 | 0
+    
+    this.height = canvas.height = window.innerHeight
+    this.spawnC = this.height * .1
+    this.spawnD = this.height * .5
+    
+  }
+  
+  onClick(evt) {
+     let x = evt.clientX || evt.touches && evt.touches[0].pageX
+     let y = evt.clientY || evt.touches && evt.touches[0].pageY
+     
+     let count = random(3,5)
+     for(let i = 0; i < count; i++) this.fireworks.push(new Firework(
+        random(this.spawnA, this.spawnB),
+        this.height,
+        x,
+        y,
+        random(0, 260),
+        random(30, 110)))
+          
+     this.counter = -1
+     
+  }
+  
+  update(delta) {
+    ctx.globalCompositeOperation = 'hard-light'
+    ctx.fillStyle = `rgba(20,20,20,${ 7 * delta })`
+    ctx.fillRect(0, 0, this.width, this.height)
+
+    ctx.globalCompositeOperation = 'lighter'
+    for (let firework of this.fireworks) firework.update(delta)
+
+    // if enough time passed... create new new firework
+    this.counter += delta * 3 // each second
+    if (this.counter >= 1) {
+      this.fireworks.push(new Firework(
+        random(this.spawnA, this.spawnB),
+        this.height,
+        random(0, this.width),
+        random(this.spawnC, this.spawnD),
+        random(0, 360),
+        random(30, 110)))
+      this.counter = 0
+    }
+
+    // remove the dead fireworks
+    if (this.fireworks.length > 1000) this.fireworks = this.fireworks.filter(firework => !firework.dead)
+
+  }
+}
+
+class Firework {
+  constructor(x, y, targetX, targetY, shade, offsprings) {
+    this.dead = false
+    this.offsprings = offsprings
+
+    this.x = x
+    this.y = y
+    this.targetX = targetX
+    this.targetY = targetY
+
+    this.shade = shade
+    this.history = []
+  }
+  update(delta) {
+    if (this.dead) return
+
+    let xDiff = this.targetX - this.x
+    let yDiff = this.targetY - this.y
+    if (Math.abs(xDiff) > 3 || Math.abs(yDiff) > 3) { // is still moving
+      this.x += xDiff * 2 * delta
+      this.y += yDiff * 2 * delta
+
+      this.history.push({
+        x: this.x,
+        y: this.y
+      })
+
+      if (this.history.length > 20) this.history.shift()
+
+    } else {
+      if (this.offsprings && !this.madeChilds) {
+        
+        let babies = this.offsprings / 2
+        for (let i = 0; i < babies; i++) {
+          let targetX = this.x + this.offsprings * Math.cos(PI2 * i / babies) | 0
+          let targetY = this.y + this.offsprings * Math.sin(PI2 * i / babies) | 0
+
+          birthday.fireworks.push(new Firework(this.x, this.y, targetX, targetY, this.shade, 0))
+
+        }
+
+      }
+      this.madeChilds = true
+      this.history.shift()
+    }
+    
+    if (this.history.length === 0) this.dead = true
+    else if (this.offsprings) { 
+        for (let i = 0; this.history.length > i; i++) {
+          let point = this.history[i]
+          ctx.beginPath()
+          ctx.fillStyle = 'hsl(' + this.shade + ',100%,' + i + '%)'
+          ctx.arc(point.x, point.y, 1, 0, PI2, false)
+          ctx.fill()
+        } 
+      } else {
+      ctx.beginPath()
+      ctx.fillStyle = 'hsl(' + this.shade + ',100%,50%)'
+      ctx.arc(this.x, this.y, 1, 0, PI2, false)
+      ctx.fill()
+    }
+
+  }
+}
+
+let canvas = document.getElementById('birthday')
+let ctx = canvas.getContext('2d')
+
+let then = timestamp()
+
+let birthday = new Birthday
+window.onresize = () => birthday.resize()
+document.onclick = evt => birthday.onClick(evt)
+document.ontouchstart = evt => birthday.onClick(evt)
+
+  ;(function loop(){
+  	requestAnimationFrame(loop)
+
+  	let now = timestamp()
+  	let delta = now - then
+
+    then = now
+    birthday.update(delta / 1000)
+
+  })()
+
+  // top data
+  // Create date from input value
+var bdayv = "2/10/"+year+"";
+var inputDate = new Date(bdayv);
+console.log(bdayv);
+// Get today's date
+var todaysDate = new Date();
+
+// call setHours to take the time out of the comparison
+if(inputDate.setHours(0,0,0,0) == todaysDate.setHours(0,0,0,0)) {
+    document.getElementById("head").innerHTML = "Happy birthday!";
+} else{
+	document.getElementById("head").innerHTML = "Smile please!";
+}
+  
+// audio
+function playSound(animal) {
+  document.getElementById(animal).play();
+};
+</script>
+</body>
+</html>
